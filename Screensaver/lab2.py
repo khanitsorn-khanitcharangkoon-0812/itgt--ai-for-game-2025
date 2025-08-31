@@ -12,17 +12,24 @@ class App:
         pygame.init()
         self.screen = pygame.display.set_mode((window_width, window_height))
         self.clock = pygame.time.Clock()
+        self.CHANGE_DIR = pygame.USEREVENT +1
+        pygame.time.set_timer(self.CHANGE_DIR, 2000)
 
         self.running = True
 
         self.ball = Agent(Vector2(window_width/2.0, window_height/2),100,(255,0,0))
+        self.target = Vector2(0,0)
 
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
 
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        self.target = Vector2(mouse_x, mouse_y)
+
     def update(self, delta_time_ms):
+        self.ball.seek_to(self.target)
         self.ball.update(delta_time_ms)
 
     def draw(self):
